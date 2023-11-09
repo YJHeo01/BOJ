@@ -20,7 +20,7 @@ for i in s:
 for i in range(q):
     answer = 0
     a,b,c = input().strip().split()
-    if a == s[int(b)]: #20번째 줄의 연산은 문장 s의 b번째 글자를 반영하지 못한다.
+    if a == s[int(b)]: #26번째 줄의 연산은 문장 s의 b번째 글자를 반영하지 못한다.
         answer += 1
     a = ord(a) - ord('a')
     answer += sentence[int(c)][a]-sentence[int(b)][a]
