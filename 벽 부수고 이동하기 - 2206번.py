@@ -1,8 +1,11 @@
 #https://www.acmicpc.net/problem/2206
-#https://www.acmicpc.net/source/71149866
+#https://www.acmicpc.net/source/71150288
 #https://github.com/YJHeo01
 
 from collections import deque
+import sys
+
+input = sys.stdin.readline
 
 n,m = map(int,input().split())
 
@@ -34,7 +37,6 @@ def search_distance_start_to_block_and_dest(graph,visited,start):
 
 def search_distance_block_to_destination(graph,visited,start):
     queue = deque([start])
-    visited[0][0] = 1
     dx = [1,0,-1,0]
     dy = [0,-1,0,1]
     while queue:
