@@ -1,5 +1,5 @@
 #https://www.acmicpc.net/problem/3584
-#https://www.acmicpc.net/source/71485999
+#https://www.acmicpc.net/source/71486478
 #https://github.com/YJHeo01
 
 import sys
@@ -11,23 +11,23 @@ t = int(input())
 def check_parent(graph,visited,start):
     if start == 0:
         return
-    parent = graph[start]
+    parent_node = graph[start]
     visited[start] = True
-    check_parent(graph,visited,parent)
+    check_parent(graph,visited,parent_node)
 
-def find_RCA(graph,visited,start):
+def find_LCA(graph,visited,start):
     if visited[start] == True:
         return start
-    return find_RCA(graph,visited,graph[start])
+    return find_LCA(graph,visited,graph[start])
 
 for _ in range(t):
     n = int(input())
-    graph = [0] * (n+1)
+    parent = [0] * (n+1)
     for _ in range(n-1):
         a,b = map(int,input().split())
-        graph[b] = a
+        parent[b] = a
     node1, node2 = map(int,input().split())
     visited = [False] * (n+1)
-    check_parent(graph,visited,node1)
-    answer = find_RCA(graph,visited,node2)
+    check_parent(parent,visited,node1)
+    answer = find_LCA(parent,visited,node2)
     print(answer)
