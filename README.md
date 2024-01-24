@@ -3,4 +3,4 @@
 ![mazandi profile](http://mazandi.herokuapp.com/api?handle=sk14cj&theme=warm)
 
 
-백준온라인저지에 있는 문제 풀이를 모아두었습니다.
+백준온라인저지 문제 풀이 모음집
