@@ -1,5 +1,5 @@
 #https://www.acmicpc.net/problem/25417
-#https://www.acmicpc.net/source/72617680
+#https://www.acmicpc.net/source/72620134
 from collections import deque
 
 board = []
@@ -18,6 +18,21 @@ r,c = map(int,input().split())
 
 INF = int(1e9)
 move_cnt = [[INF]*5 for _ in range(5)]
+
+def run(graph,direction,start):
+    nx,ny = start
+    dx,dy = direction
+    while True:
+        nx += dx
+        ny += dy
+        if nx < 0 or ny < 0 or nx >= 5 or ny >= 5 or graph[nx][ny] == -1:
+            nx -= dx
+            ny -= dy
+            break
+        if graph[nx][ny] == 7:
+            break
+    return nx,ny
+
 def solution(graph,move_cnt,start):
     queue = deque([start])
     move_cnt[start[0]][start[1]] = 0
@@ -35,15 +50,7 @@ def solution(graph,move_cnt,start):
                 queue.append((nx,ny))
             if graph[nx][ny] == 7:
                 continue
-            while True:
-                nx += dx[i]
-                ny += dy[i]
-                if nx < 0 or ny < 0 or nx >= 5 or ny >= 5 or graph[nx][ny] == -1:
-                    nx -= dx[i]
-                    ny -= dy[i]
-                    break
-                if graph[nx][ny] == 7:
-                    break
+            nx,ny = run(graph,(dx[i],dy[i]),(nx,ny))
             if move_cnt[nx][ny] > move_cnt[vx][vy] + 1:
                 move_cnt[nx][ny] = move_cnt[vx][vy] + 1
                 queue.append((nx,ny))
