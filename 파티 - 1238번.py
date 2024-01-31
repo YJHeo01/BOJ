@@ -1,5 +1,5 @@
 #https://www.acmicpc.net/problem/1238
-#https://www.acmicpc.net/source/69568124
+#https://www.acmicpc.net/source/72686822
 import heapq
 import sys
 
@@ -27,7 +27,7 @@ def dijkstra_home_x(start):
         for i in road[now]:
             if distance[i[0]] > distance[now] + i[1]:
                 distance[i[0]] = distance[now] + i[1]
-                heapq.heappush(q,(i[1],i[0]))
+                heapq.heappush(q,(distance[i[0]],i[0]))
     return distance[x]
 
 def dijkstra_x_home(start):
@@ -42,7 +42,7 @@ def dijkstra_x_home(start):
         for i in road[now]:
             if distance[i[0]] > distance[now] + i[1]:
                 distance[i[0]] = distance[now] + i[1]
-                heapq.heappush(q,(i[1],i[0]))
+                heapq.heappush(q,(distance[i[0]],i[0]))
     return distance[start]
 
 answer = 0
