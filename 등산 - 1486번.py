@@ -1,3 +1,5 @@
+#https://www.acmicpc.net/problem/1486
+#https://www.acmicpc.net/source/72955636
 #https://github.com/YJHeo01
 #dijkstra
 import heapq
