@@ -1,57 +1,42 @@
 #https://www.acmicpc.net/problem/1005
-#https://www.acmicpc.net/source/71154349
+#https://www.acmicpc.net/source/73026281
 #https://github.com/YJHeo01
-#pypy3
 
-import sys
 from collections import deque
+import sys
 
 input = sys.stdin.readline
 
 t = int(input())
 
-INF = int(1e9)
-
-def dfs(building,visited):
-    return_set = set([])
-    if reverse_tech_tree[building] == []:
-        return set([building])
-    for i in reverse_tech_tree[building]:
-        if visited[i] == False:
-            visited[i] = True
-            return_set = return_set | dfs(i,visited)
-    return return_set
-
-    
-def search_start_build(building,visited):
-    return dfs(building,visited)
-
-def bfs(graph,visited,start,time):
-    queue = deque(list(start))
-    while queue:
-        building = queue.popleft()
-        for next_building in graph[building]:
-            if visited[next_building] < visited[building] + time[next_building]:
-                visited[next_building] = visited[building] + time[next_building]
-                queue.append(next_building)
-
-def search_answer(tech_tree,time_list,start,time):
-    bfs(tech_tree,time_list,start,time)
-
-for _ in range(t):
+def solution():
     n,k = map(int,input().split())
+    rule = [[]for _ in range(n+1)]
+    indegree = [0] * (n+1)
     build_time = [0] + list(map(int,input().split()))
-    tech_tree = [[] for _ in range(n+1)]
-    reverse_tech_tree = [[] for _ in range(n+1)]
     for _ in range(k):
-        pre_building, building = map(int,input().split())
-        tech_tree[pre_building].append(building)
-        reverse_tech_tree[building].append(pre_building)
-    destination_building = int(input())
-    visited = [False] * (n+1)
-    start_build = search_start_build(destination_building,visited)
-    dp = [0] * (n+1)
-    for build in start_build:
-        dp[build] = build_time[build]
-    search_answer(tech_tree,dp,start_build,build_time)
-    print(dp[destination_building])
+        a,b = map(int,input().split())
+        rule[a].append(b)
+        indegree[b] += 1
+    dest = int(input())
+    start = deque([])
+    build_complete_time = [0] * (n+1)
+    build_complete = [False] * (n+1)
+    for i in range(1,n+1):
+        if indegree[i] == 0:
+            start.append(i)
+    while start:
+        building = start.popleft()
+        build_complete[building] = True
+        build_complete_time[building] += build_time[building]
+        for next_build in rule[building]:
+            if build_complete[next_build] == True:
+                continue
+            indegree[next_build] -= 1
+            if indegree[next_build] == 0:
+                start.append(next_build)
+            build_complete_time[next_build] = max(build_complete_time[next_build],build_complete_time[building])
+    print(build_complete_time[dest])
+            
+for _ in range(t):
+    solution()
