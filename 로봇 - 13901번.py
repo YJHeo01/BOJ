@@ -1,12 +1,10 @@
 #https://www.acmicpc.net/problem/13901
-#https://www.acmicpc.net/source/73075616
-
+#https://www.acmicpc.net/source/73075748
 import sys
 
 input = sys.stdin.readline
 
 r,c = map(int,input().split())
-room = [[0]*c for _ in range(r)]
 k = int(input())
 impossible_move = [[False]*c for _ in range(r)]
 for _ in range(k):
@@ -15,8 +13,7 @@ for _ in range(k):
 sr,sc = map(int,input().split())
 command = list(map(int,input().split()))
 
-
-def solution(graph,visited,start):
+def solution(visited,start):
     vx,vy,d = start
     dx = [0,-1,1,0,0]
     dy = [0,0,0,-1,1]
@@ -33,7 +30,7 @@ def solution(graph,visited,start):
             visited[nx][ny] = True
             vx,vy,d = nx,ny,(d+i)%4
             break
-answer = solution(room,impossible_move,(sr,sc,0))
+answer = solution(impossible_move,(sr,sc,0))
 
 for i in answer:
     print(i,end=" ")
