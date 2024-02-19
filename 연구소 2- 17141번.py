@@ -1,4 +1,4 @@
-#https://www.acmicpc.net/user/sk14cj
+#https://www.acmicpc.net/problem/17141
 #https://www.acmicpc.net/source/73643204
 
 from collections import deque
