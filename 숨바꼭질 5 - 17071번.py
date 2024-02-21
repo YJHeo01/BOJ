@@ -1,5 +1,5 @@
 #https://www.acmicpc.net/problem/17071
-#https://www.acmicpc.net/source/73776680
+#https://www.acmicpc.net/source/73776909
 from collections import deque
 
 INF = int(1e9)
@@ -13,6 +13,10 @@ def bfs(visited,start):
     while queue:
         vx,vt = queue.popleft()
         nt = (vt+1) % 2
+        nx = vx * 2
+        if nx <= 500000 and visited[nt][nx] > visited[vt][vx] + 1:
+            visited[nt][nx] = visited[vt][vx] + 1
+            queue.append((nx,nt))
         for i in range(2):
             nx = vx + dx[i]
             if nx < 0 or nx > 500000:
@@ -20,12 +24,7 @@ def bfs(visited,start):
             if visited[nt][nx] > visited[vt][vx] + 1:
                 visited[nt][nx] = visited[vt][vx] + 1
                 queue.append((nx,nt))
-        nx = vx * 2
-        if nx > 500000:
-            continue
-        if visited[nt][nx] > visited[vt][vx] + 1:
-            visited[nt][nx] = visited[vt][vx] + 1
-            queue.append((nx,nt))
+
 
 n,k = map(int,input().split())
 
