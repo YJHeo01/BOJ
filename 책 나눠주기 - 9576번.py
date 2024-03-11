@@ -1,3 +1,10 @@
+#https://www.acmicpc.net/problem/9576
+#https://www.acmicpc.net/source/74753746
+
+import sys
+
+input = sys.stdin.readline
+
 t = int(input())
 
 for _ in range(t):
