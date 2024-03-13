@@ -1,53 +1,56 @@
 #https://www.acmicpc.net/problem/13913
-#https://www.acmicpc.net/source/72539343
+#https://www.acmicpc.net/source/74906277
 
 from collections import deque
 
 n,k = map(int,input().split())
 
-length = 200001
-INF = int(1e9)
-dp = [INF] * length
+SIZE = 100001
 
-def bfs(visited,start):
-    queue = deque([start])
+visited = [SIZE] * SIZE
+path = [0] * SIZE
+
+def bfs(visited,path,start):
     visited[start] = 0
-    dx = [1,-1]
+    path[start] = -1
+    queue = deque([start])
     while queue:
         vx = queue.popleft()
-        for i in range(2):
-            nx = vx + dx[i]
-            if nx < 0 or nx >= length:
-                continue
+        if vx * 2 < SIZE:
+            nx = vx * 2
             if visited[nx] > visited[vx] + 1:
                 visited[nx] = visited[vx] + 1
+                path[nx] = vx
                 queue.append(nx)
-        if vx * 2 < length and visited[vx*2] > visited[vx] + 1:
-            visited[vx*2] = visited[vx] + 1
-            queue.append(vx*2)
+        if vx + 1< SIZE:
+            nx = vx + 1
+            if visited[nx] > visited[vx] + 1:
+                visited[nx] = visited[vx] + 1
+                path[nx] = vx
+                queue.append(nx)
+        if vx != 0:
+            nx = vx - 1
+            if visited[nx] > visited[vx] + 1:
+                visited[nx] = visited[vx] + 1
+                path[nx] = vx
+                queue.append(nx)
 
-bfs(dp,n)
+bfs(visited,path,n)
 
-def print_second_line_answer(array):
-    while True:
-        if array == []:
-            return
-        print(array.pop(),end=" ")
+first_answer = visited[k]
+second_answer = []
+second_answer.append(k)
+vx = k
+while True:
+    nx = path[vx]
+    if nx == -1:
+        break
+    second_answer.append(nx)
+    vx = nx
 
-def get_second_line_answer(visited,position):
-    second_line = []
-    while True:
-        second_line.append(position)
-        if visited[position] == 0:
-            return second_line
-        if visited[position] == visited[position-1] + 1:
-            next_position = position - 1
-        elif visited[position] == visited[position+1] + 1:
-            next_position = position + 1
-        else:
-            next_position = position // 2
-        position = next_position
-
-print(dp[k])
-second_line_answer = get_second_line_answer(dp,k)
-print_second_line_answer(second_line_answer)
+print(first_answer)
+while True:
+    if second_answer == []:
+        break
+    idx = second_answer.pop()
+    print(idx,end=" ")
