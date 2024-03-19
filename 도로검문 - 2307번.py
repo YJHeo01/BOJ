@@ -1,5 +1,5 @@
 #https://www.acmicpc.net/problem/2307
-#https://www.acmicpc.net/source/75251633
+#https://www.acmicpc.net/source/75251770
 
 import heapq,sys
 
@@ -9,11 +9,9 @@ INF = int(1e9)
 
 n,m = map(int,input().split())
 graph = [[] for _ in range(n+1)]
-road_list = []
 
 for _ in range(m):
     a,b,time = map(int,input().split())
-    road_list.append([a,b])
     graph[a].append((b,time))
     graph[b].append((a,time))
 
