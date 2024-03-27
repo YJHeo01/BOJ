@@ -1,5 +1,9 @@
 #https://www.acmicpc.net/problem/2295
-#https://www.acmicpc.net/source/75817271
+#https://www.acmicpc.net/source/75817399
+
+import sys
+
+input = sys.stdin.readline
 
 n = int(input())
 
