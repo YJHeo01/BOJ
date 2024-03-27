@@ -1,5 +1,5 @@
 #https://www.acmicpc.net/problem/2295
-#https://www.acmicpc.net/source/75808305
+#https://www.acmicpc.net/source/75808523
 
 n = int(input())
 
@@ -13,7 +13,7 @@ array.sort()
 answer = -1
 
 for target_idx in range(n-1,-1,-1):
-    for right in range(target_idx+1):
+    for right in range(target_idx):
         for left in range(right+1):
             tmp_left = left; tmp_right = right
             target_value = array[target_idx]
