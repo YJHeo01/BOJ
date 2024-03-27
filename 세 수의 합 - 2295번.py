@@ -1,5 +1,5 @@
 #https://www.acmicpc.net/problem/2295
-#https://www.acmicpc.net/source/75808523
+#https://www.acmicpc.net/source/75817271
 
 n = int(input())
 
@@ -19,7 +19,7 @@ for target_idx in range(n-1,-1,-1):
             target_value = array[target_idx]
             target_value -= array[left]
             target_value -= array[right]
-            if target_value < 0:
+            if target_value < array[left]:
                 break
             while tmp_left <= tmp_right:
                 mid = (tmp_left+tmp_right) // 2
