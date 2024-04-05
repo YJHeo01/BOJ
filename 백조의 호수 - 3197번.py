@@ -1,5 +1,6 @@
 #https://www.acmicpc.net/problem/3197
 #https://www.acmicpc.net/source/76393803
+#pypy3
 
 from collections import deque
 import sys
