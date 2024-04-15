@@ -1,5 +1,5 @@
 #https://www.acmicpc.net/problem/1800
-#https://www.acmicpc.net/source/76981185
+#https://www.acmicpc.net/source/76981751
 
 import heapq,sys
 
@@ -41,7 +41,7 @@ def solution(graph,max_cost_list):
 
 solution(cable,max_cost_list)
 
-answer = min(max_cost_list[n])
+answer = max_cost_list[n][0]
 
 if answer >= INF:
     answer = -1
