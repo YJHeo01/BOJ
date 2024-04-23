@@ -1,5 +1,5 @@
 #https://www.acmicpc.net/problem/1113
-#https://www.acmicpc.net/source/77363667
+#https://www.acmicpc.net/source/77363778
 
 from collections import deque
 
@@ -14,7 +14,7 @@ for i in range(n):
     for j in range(m):
         graph[i][j] = int(graph[i][j])
 
-def check_make_new_pool(graph,visited,start,height):
+def possible_build_waterpark(graph,visited,start,height):
     ret_value = True
     queue = deque([start])
     dx = [0,1,0,-1]
@@ -33,10 +33,10 @@ def check_make_new_pool(graph,visited,start,height):
                 queue.append((nx,ny))
     return ret_value
 
-def build_new_pool(graph,visited,start,height):
+def build_water_park(graph,water_park,start,height):
     queue = deque([start])
     ret_value = 1
-    visited[start[0]][start[1]] = True
+    water_park[start[0]][start[1]] = True
     dx = [0,1,0,-1]
     dy = [1,0,-1,0]
     graph[start[0]][start[1]] += 1
@@ -45,9 +45,9 @@ def build_new_pool(graph,visited,start,height):
         for i in range(4):
             nx = vx + dx[i]
             ny = vy + dy[i]
-            if height > graph[nx][ny] and visited[nx][ny] == False:
+            if height > graph[nx][ny] and water_park[nx][ny] == False:
                 ret_value += 1
-                visited[nx][ny] = True
+                water_park[nx][ny] = True
                 graph[nx][ny] += 1
                 queue.append((nx,ny))
     return ret_value
@@ -56,13 +56,12 @@ answer = 0
 
 for height in range(2,10):
     visited = [[False]*m for _ in range(n)]
-    pool_zone = [[False]*m for _ in range(n)]
+    water_park = [[False]*m for _ in range(n)]
     for x in range(n):
         for y in range(m):
             if visited[x][y] == True or graph[x][y] >= height:
                 continue
-            if check_make_new_pool(graph,visited,(x,y),height) == True:
-                make_new_pool = True
-                answer += build_new_pool(graph,pool_zone,(x,y),height)
+            if possible_build_waterpark(graph,visited,(x,y),height) == True:
+                answer += build_water_park(graph,water_park,(x,y),height)
     
 print(answer)
