@@ -1,11 +1,14 @@
 #https://www.acmicpc.net/problem/1400
-#https://www.acmicpc.net/source/77366817
+#https://www.acmicpc.net/source/77367107
 
 from collections import deque
 
 INF = int(1e9)
 
 def check_red_signal(state,cross_idx,direction_idx):
+    if cross_idx.isdigit() == False:
+        return False
+    cross_idx = int(cross_idx)
     if state[cross_idx] == '-':
         if direction_idx > 1:
             return True
@@ -44,10 +47,9 @@ def solution(graph,visited,start,timer,time_table,state):
             if nx < 0 or ny < 0 or nx >= m or ny >= n or graph[nx][ny] == '.':
                 continue
             if visited[nx][ny] > visited[vx][vy] + 1:
-                if graph[nx][ny].isdigit() == True:
-                    if check_red_signal(state,int(graph[nx][ny]),i) == True:
-                        red_signal = True
-                        continue
+                if check_red_signal(state,graph[nx][ny],i) == True:
+                    red_signal = True
+                    continue
                 visited[nx][ny] = visited[vx][vy] + 1
                 queue.append((nx,ny))
         if red_signal == True:
