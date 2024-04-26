@@ -1,22 +1,26 @@
 #https://www.acmicpc.net/problem/1162
-#https://www.acmicpc.net/source/76989013
+#https://www.acmicpc.net/source/77490833
 
 import sys,heapq
 
 input = sys.stdin.readline
 
-n,m,k = map(int,input().split())
-
 INF = int(1e10)
 
-distance = [[INF] * (k+1) for _ in range(n+1)]
+def main():
+    graph = get_graph()
+    distance = [[INF] * (k+1) for _ in range(n+1)]
+    solution(graph,distance)
+    answer = min(distance[n])
+    print(answer)
 
-graph = [[] for _ in range(n+1)]
-
-for _ in range(m):
-    a,b,c = map(int,input().split())
-    graph[a].append((b,c))
-    graph[b].append((a,c))
+def get_graph():
+    graph = [[] for _ in range(n+1)]
+    for _ in range(m):
+        a,b,c = map(int,input().split())
+        graph[a].append((b,c))
+        graph[b].append((a,c))
+    return graph
 
 def solution(graph,distance):
     q = []
@@ -37,8 +41,6 @@ def solution(graph,distance):
                     distance[nx][cnt-1] = vt
                     heapq.heappush(q,(vt,cnt-1,nx))
 
-solution(graph,distance)
-
-answer = min(distance[n])
-
-print(answer)
+if __name__ == "__main__":
+    n,m,k = map(int,input().split())
+    main()
