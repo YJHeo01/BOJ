@@ -1,23 +1,28 @@
 #https://www.acmicpc.net/problem/1854
-#https://www.acmicpc.net/source/76561884
+#https://www.acmicpc.net/source/77489013
 
 import sys,heapq
 
 input = sys.stdin.readline
 
-n,m,k = map(int,input().split())
-
 INF = int(1e9)
 
-graph = [[] for _ in range(n+1)]
+def main():
+    global n,m,k
+    n,m,k = map(int,input().split())
+    graph = get_graph()
+    distance = [[INF]*k for _ in range(n+1)]
+    k -= 1
+    solution(graph,distance)
+    print_answer(distance,k)
 
-distance = [[INF]*k for _ in range(n+1)]
+def get_graph():
+    graph = [[] for _ in range(n+1)]
+    for _ in range(m):
+        a,b,c = map(int,input().split())
+        graph[a].append((b,c))
+    return graph
 
-
-for _ in range(m):
-    a,b,c = map(int,input().split())
-    graph[a].append((b,c))
-k -= 1
 def solution(graph,distance):
     q = []
     heapq.heappush(q,(0,1))
@@ -32,11 +37,13 @@ def solution(graph,distance):
                 distance[nx][k] = nt
                 distance[nx].sort()
                 heapq.heappush(q,(nt,nx))
-                
-solution(graph,distance)
 
-for i in range(1,n+1):
-    time = distance[i][k]
-    if time >= INF:
-        time = -1
-    print(time)
+def print_answer(distance,k):
+    for i in range(1,n+1):
+        time = distance[i][k]
+        if time >= INF:
+            time = -1
+        print(time)
+
+if __name__ == "__main__":
+    main()
