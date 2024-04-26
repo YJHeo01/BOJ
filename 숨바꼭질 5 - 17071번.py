@@ -1,12 +1,18 @@
 #https://www.acmicpc.net/problem/17071
-#https://www.acmicpc.net/source/73776909
+#https://www.acmicpc.net/source/77494497
+
 from collections import deque
 
 INF = int(1e9)
 
-visited = [[INF]*(500001) for _ in range(2)]
+def main():
+    n,k = map(int,input().split())
+    visited = [[INF]*(500001) for _ in range(2)]
+    move_Subin(visited,n)
+    answer = solution(visited,k)
+    print(answer)
 
-def bfs(visited,start):
+def move_Subin(visited,start):
     queue = deque([(start,0)])
     visited[0][start] = 0
     dx = [1,-1]
@@ -25,22 +31,18 @@ def bfs(visited,start):
                 visited[nt][nx] = visited[vt][vx] + 1
                 queue.append((nx,nt))
 
+def solution(visited,k):
+    answer = -1
+    time = 0
+    while True:
+        k += time
+        if k > 500000:
+            break
+        if visited[time%2][k] <= time:
+            answer = time
+            break
+        time += 1
+    return answer
 
-n,k = map(int,input().split())
-
-answer = -1
-
-bfs(visited,n)
-
-time = 0
-
-while True:
-    k += time
-    if k > 500000:
-        break
-    if visited[time%2][k] <= time:
-        answer = time
-        break
-    time += 1
-
-print(answer)
+if __name__ == "__main__":
+    main()
