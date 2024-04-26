@@ -1,6 +1,5 @@
 #https://www.acmicpc.net/problem/15806
-#https://www.acmicpc.net/source/77488599
-
+#https://www.acmicpc.net/source/77490362
 from collections import deque
 import sys
 
@@ -30,17 +29,18 @@ def move_mold(visited,start):
         visited[z%2][x][y] = True
     while queue:
         vx, vy, time = queue.popleft()
-        if time == t:
-            continue
+        nt = time + 1
         for i in range(8):
             nx = vx + dx[i]
             ny = vy + dy[i]
             if nx <= 0 or ny <= 0 or nx > n or ny > n:
                 continue
-            if visited[(time+1)%2][nx][ny] == True:
+            if visited[nt%2][nx][ny] == True:
                 continue
-            visited[(time+1)%2][nx][ny] = True
-            queue.append((nx,ny,time+1))
+            visited[nt%2][nx][ny] = True
+            if nt == t:
+                continue
+            queue.append((nx,ny,nt))
 
 def get_answer(visited):
     yes = False
