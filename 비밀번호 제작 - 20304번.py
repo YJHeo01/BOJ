@@ -1,31 +1,28 @@
 #https://www.acmicpc.net/problem/20304
-#https://www.acmicpc.net/source/75457934
 #pypy3
 
 from collections import deque
 
-n = int(input())
+INF = 21
 
+def main():
+    visited = [INF] * (n+1)
+    password_list = list(map(int,input().split()))
+    for password in password_list:
+        visited[password] = 0
+    answer = solution(visited,password_list)
+    print(answer)
 
-INF = int(1e9)
-
-visited = [INF] * (n+1)
-
-m = int(input())
-
-start = list(map(int,input().split()))
 def solution(visited,start):
     queue = deque(start)
-    for idx in start:
-        visited[idx] = 0
     ret_value = 0
     while queue:
         vx = queue.popleft()
         ret_value = visited[vx]
-        for i in range(20):
+        for i in range(19,-1,-1):
             nx = vx & ((2**20-1) - 2**i)
             if nx > n:
-                continue
+                break
             if visited[nx] > visited[vx] + 1:
                 visited[nx] = visited[vx] + 1
                 queue.append(nx)
@@ -38,6 +35,7 @@ def solution(visited,start):
                 queue.append(nx)
     return ret_value
 
-answer = solution(visited,start)
-
-print(answer)
+if __name__ == "__main__":
+    n = int(input())
+    m = int(input())
+    main()
