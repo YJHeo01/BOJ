@@ -1,21 +1,28 @@
 #https://www.acmicpc.net/problem/15806
-#https://www.acmicpc.net/source/73445930
+#https://www.acmicpc.net/source/77488599
 
- from collections import deque
+from collections import deque
 import sys
 
 input = sys.stdin.readline
 
-n,m,k,t = map(int,input().split())
+def main():
+    start = get_start()
+    visited = [[[False]*(n+1) for _ in range(n+1)]for _ in range(2)]
+    move_mold(visited,start)
+    yes = get_answer(visited)
+    if yes == True:
+        print("YES")
+    else:
+        print("NO")
 
-visited = [[[False]*(n+1) for _ in range(n+1)]for _ in range(2)]
+def get_start():
+    start = []
+    for _ in range(m):
+        start.append(list(map(int,input().split())) + [0])
+    return start
 
-start = []
-
-for _ in range(m):
-    start.append(list(map(int,input().split())) + [0])
-
-def solution(visited,start):
+def move_mold(visited,start):
     queue = deque(start)
     dx = [2,2,1,1,-1,-1,-2,-2]
     dy = [1,-1,2,-2,2,-2,1,-1]
@@ -35,18 +42,18 @@ def solution(visited,start):
             visited[(time+1)%2][nx][ny] = True
             queue.append((nx,ny,time+1))
 
-solution(visited,start)
-yes = False
-
-for _ in range(k):
-    a,b = map(int,input().split())
-    if visited[t%2][a][b] == True:
-        yes = True
-
-if n < 3:
+def get_answer(visited):
     yes = False
-    
-if yes == True:
-    print("YES")
-else:
-    print("NO")
+    for _ in range(k):
+        a,b = map(int,input().split())
+        if visited[t%2][a][b] == True:
+            yes = True
+            break
+    return yes
+
+if __name__ == "__main__":
+    n,m,k,t = map(int,input().split())
+    if n < 3:
+        print("NO")
+        exit(0)
+    main()
