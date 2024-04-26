@@ -1,5 +1,5 @@
 #https://www.acmicpc.net/problem/1948
-#https://www.acmicpc.net/source/77492034
+#https://www.acmicpc.net/source/77492107
 
 from collections import deque
 import sys
@@ -56,10 +56,8 @@ def get_road_cnt(graph,visited_road,dest_time,start):
                     visited_road[start][nx] = True
             else:
                 one = True
-    if ret_value > 0:
+    if ret_value > 0 or one == True:
         ret_value += 1
-    if ret_value == 0 and one == True:
-        ret_value = 1
     return ret_value
 
 if __name__ == "__main__":
