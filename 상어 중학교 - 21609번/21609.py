@@ -1,7 +1,10 @@
 #https://www.acmicpc.net/problem/21609
-#https://www.acmicpc.net/source/77749132
+#https://www.acmicpc.net/source/77750118
 
 from collections import deque
+
+RAINBOW = 0
+EMPTY = -2
 
 def main():
     board = get_board(); answer = 0
@@ -16,7 +19,7 @@ def main():
                 tmp_block_cnt, tmp_rainbow_block_cnt = get_block_cnt(board,visited,(i,j))
                 if tmp_block_cnt > target_block_cnt or (tmp_block_cnt == target_block_cnt and tmp_rainbow_block_cnt >= target_rainbow_block_cnt):
                     target_block_cnt = tmp_block_cnt; target_rainbow_block_cnt = tmp_rainbow_block_cnt; target_point = (i,j)
-        if target_block_cnt <= 1:
+        if finish_game(target_block_cnt) == True:
             break
         answer += (target_block_cnt ** 2)
         remove_block(board,target_point)
@@ -43,9 +46,9 @@ def get_block_cnt(graph,visited,start):
         for i in range(4):
             nx = vx + dx[i]
             ny = vy + dy[i]
-            if nx < 0 or ny < 0 or nx >= n or ny >= n or visited[nx][ny] == True:
+            if exit_board(nx,ny) == True or visited[nx][ny] == True:
                 continue
-            if graph[nx][ny] == 0:
+            if graph[nx][ny] == RAINBOW:
                 rainbow_block.append((nx,ny))
                 tmp_rainbow_block_cnt += 1
             else:
@@ -54,24 +57,33 @@ def get_block_cnt(graph,visited,start):
             visited[nx][ny] = True
             tmp_block_cnt += 1
             queue.append((nx,ny))
-    for x,y in rainbow_block:
-        visited[x][y] = False
+    visited = init_rainbow_block(visited,rainbow_block)
     return tmp_block_cnt, tmp_rainbow_block_cnt
 
+def exit_board(x,y):
+    if x < 0 or y < 0 or x >= n or y >= n:
+        return True
+    return False
+
+def init_rainbow_block(visited,block):
+    for x,y in block:
+        visited[x][y] = False
+    return visited
+    
 def remove_block(graph,start):
     queue = deque([start])
     target_idx = graph[start[0]][start[1]]
     dx = [0,1,0,-1]; dy = [1,0,-1,0]
-    graph[start[0]][start[1]] = -2
+    graph[start[0]][start[1]] = EMPTY
     while queue:
         vx,vy = queue.popleft()
         for i in range(4):
             nx = vx + dx[i]
             ny = vy + dy[i]
-            if nx < 0 or ny < 0 or nx >= n or ny >= n:
+            if exit_board(nx,ny) == True:
                 continue
-            if graph[nx][ny] == target_idx or graph[nx][ny] == 0:
-                graph[nx][ny] = -2
+            if graph[nx][ny] == target_idx or graph[nx][ny] == RAINBOW:
+                graph[nx][ny] = EMPTY
                 queue.append((nx,ny))
 
 def gravity(graph):
@@ -85,18 +97,31 @@ def move_block(graph,start):
     x,y = start
     while True:
         x += 1
-        if x >= n or graph[x][y] != -2:
+        if x >= n or graph[x][y] != EMPTY:
             break
         graph[x][y],graph[x-1][y] = graph[x-1][y],graph[x][y]
 
 def turn_counterclockwise(board):
-    new_board = [[-2]*n for _ in range(n)]
+    new_board = [[EMPTY]*n for _ in range(n)]
     for x in range(n):
         for y in range(n):
-            nx = n - 1 - y
-            ny = x
-            new_board[nx][ny] = board[x][y]
+            new_board[get_nx(y)][get_ny(x)] = board[x][y]
     return new_board
+
+def get_nx(y):
+    return n - 1 - y
+
+def get_ny(x):
+    return x
+
+def finish_game(block_cnt):
+    if block_cnt <= 1:
+        return True
+    return False
+
+if __name__ == "__main__":
+    n, m = map(int,input().split())
+    main()
 
 if __name__ == "__main__":
     n, m = map(int,input().split())
