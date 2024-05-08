@@ -1,12 +1,42 @@
+#BFS
 #https://www.acmicpc.net/problem/11559
-#https://www.acmicpc.net/source/75332315
+#https://www.acmicpc.net/source/78027306
 
 from collections import deque
 
-field = []
+def main():
+    field = get_field()
+    answer = puyo_puyo(field)
+    print(answer)
 
-for _ in range(12):
-    field.append(list(input()))
+def get_field():
+    field = []
+    for _ in range(12):
+        field.append(list(input()))
+    return field
+
+def puyo_puyo(field):
+    score = 0
+    while True:
+        game_over = True
+        visited = [[False]*6 for _ in range(12)]
+        for i in range(12):
+            for j in range(6):
+                if field[i][j] != '.' and visited[i][j] == False:
+                    game_over = play_game(field,visited,(i,j)) and game_over
+        if game_over == True:
+            break
+        score += 1
+        for i in range(6):
+            gravity_puyo(field,i)
+    return score
+
+def play_game(graph,visited,start):
+    same_puyo_cnt = find_same_puyo_cnt(graph,visited,start)
+    if same_puyo_cnt >= 4:
+        bang_puyo(graph,start)
+        return False
+    return True
 
 def find_same_puyo_cnt(graph,visited,start):
     queue = deque([start])
@@ -43,14 +73,6 @@ def bang_puyo(graph,start):
             if graph[nx][ny] == puyo_type:
                 queue.append((nx,ny))
 
-def puyo_puyo(graph,visited,start):
-    same_puyo_cnt = find_same_puyo_cnt(graph,visited,start)
-    if same_puyo_cnt >= 4:
-        bang_puyo(graph,start)
-        return False
-    return True
-
-answer = 0
 def gravity_puyo(graph,column):
     before_move_row = 11
     after_move_row = 11
@@ -62,17 +84,5 @@ def gravity_puyo(graph,column):
         if before_move_row < 0:
             break
 
-while True:
-    game_over = True
-    visited = [[False]*6 for _ in range(12)]
-    for i in range(12):
-        for j in range(6):
-            if field[i][j] != '.' and visited[i][j] == False:
-                game_over = puyo_puyo(field,visited,(i,j)) and game_over
-    if game_over == True:
-        break
-    answer += 1
-    for i in range(6):
-        gravity_puyo(field,i)
-
-print(answer)
+if __name__ == "__main__":
+    main()
