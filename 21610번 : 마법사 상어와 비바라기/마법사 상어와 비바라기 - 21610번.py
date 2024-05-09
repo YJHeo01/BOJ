@@ -1,19 +1,35 @@
 #https://www.acmicpc.net/problem/21610
-#https://www.acmicpc.net/source/75464000
+#https://www.acmicpc.net/source/78079913
 
-n,m = map(int,input().split())
+import sys
 
-ground = []
+input = sys.stdin.readline
 
-for _ in range(n):
-    ground.append(list(map(int,input().split())))
+def main():
+    ground = get_ground()
+    command_list = get_command_list()
+    cloud_list = [[n-1,0],[n-1,1],[n-2,0],[n-2,1]]
+    for command in command_list:
+        move_cloud(cloud_list,command)
+        rain(ground,cloud_list)
+        cloud_area = [[False]*n for _ in range(n)]
+        erase_cloud_area(cloud_area,cloud_list)
+        magic(ground,cloud_list)
+        cloud_list = creative_new_cloud(ground,cloud_area)
+    answer = get_answer(ground)
+    print(answer)
 
-command_list = []
+def get_ground():
+    ground = []
+    for _ in range(n):
+        ground.append(list(map(int,input().split())))
+    return ground
 
-for _ in range(m):
-    command_list.append(list(map(int,input().split())))
-
-cloud_list = [[n-1,0],[n-1,1],[n-2,0],[n-2,1]]
+def get_command_list():
+    command_list = []
+    for _ in range(m):
+        command_list.append(list(map(int,input().split())))
+    return command_list
 
 def move_cloud(cloud_list,command):
     dx = [0,0,-1,-1,-1,0,1,1,1]
@@ -63,18 +79,13 @@ def creative_new_cloud(ground,cloud_area):
                 new_cloud.append([i,j])
     return new_cloud
 
-for command in command_list:
-    move_cloud(cloud_list,command)
-    rain(ground,cloud_list)
-    cloud_area = [[False]*n for _ in range(n)]
-    erase_cloud_area(cloud_area,cloud_list)
-    magic(ground,cloud_list)
-    cloud_list = creative_new_cloud(ground,cloud_area)
+def get_answer(ground):
+    answer = 0
+    for i in range(n):
+        for j in range(n):
+            answer += ground[i][j]
+    return answer
 
-answer = 0
-
-for i in range(n):
-    for j in range(n):
-        answer += ground[i][j]
-
-print(answer)
+if __name__ == "__main__":
+    n,m = map(int,input().split())
+    main()
