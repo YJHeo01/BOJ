@@ -1,24 +1,27 @@
 #https://www.acmicpc.net/problem/15988
-#https://www.acmicpc.net/source/71763392
+#https://www.acmicpc.net/source/78081025
+
 import sys
 
 input = sys.stdin.readline
 
-t = int(input())
+def main():
+    t = int(input())
+    dp = get_dp()
+    for _ in range(t):
+        num = int(input())
+        answer = dp[num]
+        print(answer)
 
-num_list = []
+def get_dp():
+    dp_size = 1000001
+    dp = [0] * dp_size
+    for i in range(1,4):
+        dp[i] = 2 ** (i-1)
+    for i in range(4,dp_size):
+        dp[i] += (dp[i-1]+dp[i-2]+dp[i-3])
+        dp[i] %= 1000000009
+    return dp
 
-for _ in range(t):
-    num_list.append(int(input()))
-size = max(max(num_list)+1,4)
-dp = [0] * size
-dp[1] = 1
-dp[2] = 2
-dp[3] = 4
-
-for i in range(4,size):
-    dp[i] += (dp[i-1]+dp[i-2]+dp[i-3])
-    dp[i] %= 1000000009
-
-for i in num_list:
-    print(dp[i])
+if __name__ == "__main__":
+    main()
