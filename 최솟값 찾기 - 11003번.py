@@ -1,5 +1,6 @@
 #https://www.acmicpc.net/problem/11003
 #https://www.acmicpc.net/source/78124354
+#pypy3
 
 import heapq
 
