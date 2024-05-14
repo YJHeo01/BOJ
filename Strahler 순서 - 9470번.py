@@ -1,40 +1,25 @@
 #https://www.acmicpc.net/problem/9470
-#https://www.acmicpc.net/source/76810900
+#https://www.acmicpc.net/source/78321614
 
 from collections import deque
 import sys
 
 input = sys.stdin.readline
 
-t = int(input())
+def main():
+    t = int(input())
+    answer = []
+    for _ in range(t):
+        k,m,p = map(int,input().split())
+        graph, reverse_graph, indegree = init_set(m,p)
+        start,strahler = get_start(indegree,m)
+        topology_sort(graph,reverse_graph,indegree,strahler,start)
+        answer.append((k,strahler[m]))
+    answer.sort()
+    for idx, num in answer:
+        print(idx,num)
 
-def topology_sort(graph,reverse_graph,indegree,strahler,start):
-    queue = deque(start)
-    while queue:
-        vx = queue.popleft()
-        if reverse_graph[vx] != []:
-            last_max_strahler = 0
-            cnt = 0
-            for nx in reverse_graph[vx]:
-                if strahler[nx] > last_max_strahler:
-                    last_max_strahler = strahler[nx]
-                    cnt = 1
-                elif strahler[nx] == last_max_strahler:
-                    cnt += 1
-                else:
-                    continue
-            strahler[vx] = last_max_strahler
-            if cnt >= 2:
-                strahler[vx] += 1
-        for nx in graph[vx]:
-            indegree[nx] -= 1
-            if indegree[nx] == 0:
-                queue.append(nx)
-
-answer = []
-
-for _ in range(t):
-    k,m,p = map(int,input().split())
+def init_set(m,p):
     indegree = [0] * (m+1)
     graph = [[] for _ in range(m+1)]
     reverse_graph = [[] for _ in range(m+1)]
@@ -43,18 +28,33 @@ for _ in range(t):
         graph[a].append(b)
         reverse_graph[b].append(a)
         indegree[b] += 1
-    strahler = [0] * (m+1)
-    start = []
-    
+    return graph, reverse_graph, indegree
+
+def get_start(indegree,m):
+    start = []; strahler = [0] * (m+1)
     for i in range(1,m+1):
-        if indegree[i] == 0:
-            start.append(i)
-            strahler[i] = 1
-    
-    topology_sort(graph,reverse_graph,indegree,strahler,start)
-    answer.append((k,strahler[m]))
+        if indegree[i] != 0: continue
+        start.append(i)
+        strahler[i] = 1
+    return start, strahler
 
-answer.sort()
-
-for idx, num in answer:
-    print(idx,num)
+def topology_sort(graph,reverse_graph,indegree,strahler,start):
+    queue = deque(start)
+    while queue:
+        vx = queue.popleft()
+        for nx in graph[vx]:
+            indegree[nx] -= 1
+            if indegree[nx] == 0: queue.append(nx)
+        if reverse_graph[vx] == []: continue
+        last_max_strahler, cnt = 0, 0
+        for nx in reverse_graph[vx]:
+            if last_max_strahler > strahler[nx]: continue
+            if strahler[nx] > last_max_strahler:
+                last_max_strahler = strahler[nx]
+                cnt = 1
+            else: cnt += 1
+        strahler[vx] = last_max_strahler
+        if cnt >= 2: strahler[vx] += 1
+        
+if __name__ == "__main__":
+    main()
