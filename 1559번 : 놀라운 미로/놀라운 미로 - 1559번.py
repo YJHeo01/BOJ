@@ -1,5 +1,5 @@
 #https://www.acmicpc.net/problem/1559
-#https://www.acmicpc.net/source/78329903
+#https://www.acmicpc.net/source/78400050
 #pypy3
 
 from itertools import permutations
@@ -18,8 +18,8 @@ def main():
         maze = get_maze(m)
         k = int(input())
         idx_list = get_idx_list(k)
-        box_list = get_box_list(k)
-        adj_matrix = get_adj_matrix(maze,box_list)
+        node_list = get_node_list(k)
+        adj_matrix = get_adj_matrix(maze,node_list)
         test_case_list = list(permutations(idx_list,k))
         answer = INF
         for test_case in test_case_list:
@@ -29,32 +29,31 @@ def main():
 
 def get_maze(m):
     maze = []
-    for _ in range(m): 
-        maze.append(list(input()))
+    for _ in range(m): maze.append(list(input()))
     return maze
 
 def get_idx_list(k):
-    ret_value = []
-    for i in range(1,k+1): ret_value.append(i)
-    return ret_value
+    idx_list = []
+    for i in range(1,k+1): idx_list.append(i)
+    return idx_list
 
-def get_box_list(k):
+def get_node_list(k):
     ret_value = [(0,0)]
     for _ in range(k):
         a, b = map(int,input().split())
         ret_value.append([a-1,b-1])
     return ret_value + [[m-1,n-1]]
 
-def get_adj_matrix(graph,box_list):
+def get_adj_matrix(graph,node_list):
     adj_matrix = [[[INF]*4 for _ in range(k+2)]for _ in range(k+2)]
-    point_cnt = len(box_list)
+    point_cnt = len(node_list)
     for start in range(point_cnt):
         for d in range(4):
             distance = [[INF]*n for _ in range(m)]
-            x,y = box_list[start]
+            x,y = node_list[start]
             bfs(graph,distance,(x,y,d))
             for end in range(point_cnt):
-                end_x, end_y = box_list[end]
+                end_x, end_y = node_list[end]
                 adj_matrix[start][end][d] = distance[end_x][end_y] - d
     return adj_matrix
 
@@ -76,9 +75,7 @@ def bfs(graph,distance,start):
             if (visited[vx][vy] + direction[graph[vx][vy]]) % 4 != i : wait = True; continue
             distance[nx][ny] = visited[vx][vy] + 1; visited[nx][ny] = distance[nx][ny]
             queue.append((nx,ny))
-        if wait == False or visited[vx][vy] >= distance[vx][vy] + 4: continue
-        visited[vx][vy] += 1
-        queue.append((vx,vy))
+        if wait == True: visited[vx][vy] += 1; queue.append((vx,vy))
     
 def exit_graph(x,y):
     if x < 0 or y < 0 or x >= m or y >= n: return True
