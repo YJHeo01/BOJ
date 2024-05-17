@@ -1,6 +1,5 @@
 #https://www.acmicpc.net/problem/13459
-#https://www.acmicpc.net/source/78415071
-#pypy3
+#https://www.acmicpc.net/source/78466401
 
 def main():
     board = get_board(n)
@@ -22,23 +21,22 @@ def get_point(board,c):
 def solution(board,red,blue,cnt):
     if cnt == 10: return 0
     ret_value = 0
+    red_x, red_y = red
+    blue_x, blue_y = blue
     for move_type in range(4):
-        new_board = get_init_new_board(board)
-        new_red, new_blue = select_move_direction(new_board,red,blue,move_type)
-        new_red_x, new_red_y = new_red
-        if new_board[new_red_x][new_red_y] != 'R':
-            new_blue_x, new_blue_y = new_blue
-            if new_board[new_blue_x][new_blue_y] == 'B': return 1
-            continue
-        ret_value = max(ret_value,solution(new_board,new_red,new_blue,cnt+1))
+        new_red, new_blue = select_move_direction(board,red,blue,move_type)
+        if new_red == red and new_blue == blue: continue
+        new_red_x, new_red_y = new_red; new_blue_x, new_blue_y = new_blue
+        if board[new_red_x][new_red_y] != 'R':
+            if board[new_blue_x][new_blue_y] == 'B': return 1
+        elif board[new_blue_x][new_blue_y] == 'O':
+            board[new_red_x][new_red_y] = '.'
+        else:
+            ret_value = max(ret_value,solution(board,new_red,new_blue,cnt+1))
+            board[new_blue_x][new_blue_y], board[new_red_x][new_red_y] = '.','.'
+        board[red_x][red_y], board[blue_x][blue_y] = 'R','B'
+    board[red_x][red_y], board[blue_x][blue_y] = 'R','B'
     return ret_value
-
-def get_init_new_board(board):
-    new_board = [[0]*m for _ in range(n)]
-    for i in range(n):
-        for j in range(m):
-            new_board[i][j] = board[i][j]
-    return new_board
 
 def select_move_direction(board,red,blue,move_type):
     if move_type == 0: n_r, n_b = move_left(board,red,blue)
