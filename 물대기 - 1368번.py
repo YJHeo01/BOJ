@@ -1,5 +1,5 @@
 #https://www.acmicpc.net/problem/1368
-#https://www.acmicpc.net/source/78947419
+#https://www.acmicpc.net/source/78949798
 
 import sys,heapq
 
@@ -8,19 +8,17 @@ input = sys.stdin.readline
 def main():
     visited = [False] * n
     new_cost = get_new_cost(n)
-    start_idx = get_start_idx(new_cost,n)
-    answer = new_cost[start_idx]
-    visited[start_idx] = True
+    answer = 0
     adj_matrix = get_adj_matrix(n)
-    q = init_q(adj_matrix,new_cost,start_idx)
+    q = init_q(new_cost)
     while q:
         cost, vx = heapq.heappop(q)
         if visited[vx] == True: continue
         visited[vx] = True
         answer += cost
         for nx in range(n):
-            if visited[nx] == True: continue
-            heapq.heappush(q,(min(adj_matrix[vx][nx],new_cost[nx]),nx))
+            if visited[nx] == True or adj_matrix[vx][nx] >= new_cost[nx]: continue
+            heapq.heappush(q,(adj_matrix[vx][nx],nx))
     print(answer)
 
 def get_new_cost(n):
@@ -42,11 +40,10 @@ def get_adj_matrix(n):
         ret_value.append(list(map(int,input().split())))
     return ret_value
 
-def init_q(adj_matrix,new_cost,start_idx):
+def init_q(new_cost):
     q = []
     for i in range(n):
-        if i == start_idx: continue
-        heapq.heappush(q,(min(adj_matrix[start_idx][i],new_cost[i]),i))
+        heapq.heappush(q,(new_cost[i],i))
     return q
 
 if __name__ == "__main__":
