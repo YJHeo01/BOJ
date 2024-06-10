@@ -1,5 +1,5 @@
 #https://www.acmicpc.net/problem/2194
-#https://www.acmicpc.net/source/79447228
+#https://www.acmicpc.net/source/79447528
 
 from collections import deque
 import sys
@@ -32,19 +32,33 @@ def bfs(graph,visited,start,a,b):
             ny = vy + dy[i]
             if nx <= 0 or ny <= 0 or nx + a - 1 > n or ny + b - 1 > m:continue
             if visited[nx][ny] != -1:continue
-            if check_possible_move(graph,ddx_ddy,(nx,ny)) == False:continue
+            if check_possible_move(graph,ddx_ddy[i],(nx,ny)) == False:continue
             if visited[nx][ny] == -1:
                 visited[nx][ny] = visited[vx][vy] + 1
                 queue.append((nx,ny))
 
 def get_ddx_ddy(a,b):
     ret_value = []
+    tmp = []
     for i in range(a):
-        ret_value.append([i,0])
-        ret_value.append([i,b-1])
+        tmp.append([i,b-1])
+    ret_value.append(tmp)
+    
+    tmp = []
     for i in range(b):
-        ret_value.append([0,i])
-        ret_value.append([a-1,i])
+        tmp.append([a-1,i])
+    ret_value.append(tmp)
+
+    tmp = []
+    for i in range(a):
+        tmp.append([i,0])
+    ret_value.append(tmp)
+
+    tmp = []
+    for i in range(b):
+        tmp.append([0,i])
+    ret_value.append(tmp)
+
     return ret_value
 
 def check_possible_move(graph,dx_dy,start):
