@@ -1,5 +1,5 @@
 #https://www.acmicpc.net/problem/20926
-#https://www.acmicpc.net/source/79573636
+#https://www.acmicpc.net/source/79573852
 
 import sys, heapq
 
@@ -16,14 +16,17 @@ def main():
 def get_maze(h):
     maze = []
     for _ in range(h):
-        maze.append(list(input()))
+        tmp = list(input())
+        for i in range(w):
+            if tmp[i].isdigit() == True: tmp[i] = int(tmp[i])
+        maze.append(tmp)
     return maze
 
 def get_start(maze):
     for i in range(h):
         for j in range(w):
             if maze[i][j] == 'T':
-                maze[i][j] = '0'
+                maze[i][j] = 0
                 return (i,j)
 
 def dijkstra(graph,distance,start):
@@ -40,22 +43,23 @@ def dijkstra(graph,distance,start):
             nx,ny = vx,vy
             time = 0
             while True:
-                nx += dx[i]
-                ny += dy[i]
-                if nx < 0 or ny < 0 or nx >= h or ny >= w or graph[nx][ny] == 'H':
+                nx += dx[i]; ny += dy[i]
+                if exit_maze(nx,ny) or graph[nx][ny] == 'H':break
+                if type(graph[nx][ny]) != int:
+                    if graph[nx][ny] == 'E': answer = min(answer,dist+time)
+                    else:
+                        nx -= dx[i]
+                        ny -= dy[i]
+                        if distance[nx][ny] > dist + time:
+                            distance[nx][ny] = dist + time
+                            heapq.heappush(q,(distance[nx][ny],nx,ny))                        
                     break
-                if graph[nx][ny] == 'R':
-                    nx -= dx[i]
-                    ny -= dy[i]
-                    if distance[nx][ny] > dist + time:
-                        distance[nx][ny] = dist + time
-                        heapq.heappush(q,(distance[nx][ny],nx,ny))
-                    break
-                if graph[nx][ny] == 'E':
-                    answer = min(answer,dist+time)
-                    break
-                time += int(graph[nx][ny])
+                time += graph[nx][ny]
     return answer
+
+def exit_maze(x,y):
+    if x < 0 or y < 0 or x >= h or y >= w: return True
+    return False
 
 if __name__ == "__main__":
     INF = int(1e9)
