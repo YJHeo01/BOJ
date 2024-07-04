@@ -1,5 +1,5 @@
 #https://www.acmicpc.net/problem/19598
-#https://www.acmicpc.net/source/80494472
+#https://www.acmicpc.net/source/80494678
 
 import sys, heapq
 
@@ -8,23 +8,25 @@ input = sys.stdin.readline
 def main():
     n = int(input())
     array = []
+    
     for _ in range(n):
         array.append(list(map(int,input().split())))
+    
     array.sort()
     answer, tmp = 0,0
     q = []
-    for i in range(n):
-        start,end = array[i]
-        tmp += 1
+    
+    for start,end in array:
         while q:
             last_end = heapq.heappop(q)
-            if start >= last_end:
-                tmp -= 1
-            else:
+            if last_end > start:
                 heapq.heappush(q,last_end)
                 break
-        answer = max(answer,tmp)
+            tmp -= 1
+        tmp += 1
         heapq.heappush(q,end)
+        answer = max(answer,tmp)
+    
     print(answer)
         
 if __name__ == "__main__":
