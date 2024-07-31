@@ -1,5 +1,5 @@
 #https://www.acmicpc.net/problem/1941
-#https://www.acmicpc.net/submit/1941/81842878
+#https://www.acmicpc.net/source/81842878
 
 from collections import deque
 from itertools import combinations
