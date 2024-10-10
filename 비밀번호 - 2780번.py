@@ -1,4 +1,7 @@
+#https://www.acmicpc.net/problem/2780
+#https://www.acmicpc.net/source/85005138
 #dp
+
 import sys
 
 input = sys.stdin.readline
@@ -8,18 +11,16 @@ def main():
     cnt[1] = 10
     INF = 1234567
     dp = [[[0]*5 for _ in range(6)] for _ in range(1001)]
-    for i in range(1,4):
-        for j in range(1,4):
-            dp[1][i][j] = 1
-    dp[1][4][1] = 1
+    position = [(1,1),(1,2),(1,3),(2,1),(2,2),(2,3),(3,1),(3,2),(3,3),(4,1)]
+    dx_dy = [(0,1),(0,-1),(1,0),(-1,0)]
+    for x,y in position:
+        dp[1][x][y] = 1
     for k in range(2,1001):
-        for vx in range(1,5):
-            for vy in range(1,4):
-                if vx >= 4 and vy >= 2: break
-                for dx,dy in [(0,1),(0,-1),(1,0),(-1,0)]:
-                    dp[k][vx][vy] += dp[k-1][vx+dx][vy+dy]
-                dp[k][vx][vy] %= INF
-                cnt[k] += dp[k][vx][vy]
+        for x,y in position:
+            for dx,dy in dx_dy:
+                dp[k][x][y] += dp[k-1][x+dx][y+dy]  
+            dp[k][x][y] %= INF
+            cnt[k] += dp[k][x][y]
         cnt[k] %= INF
     t = int(input())
     for _ in range(t):
