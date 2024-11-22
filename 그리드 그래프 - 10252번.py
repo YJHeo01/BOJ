@@ -1,5 +1,5 @@
 #https://www.acmicpc.net/problem/10252
-#https://www.acmicpc.net/source/86740580
+#https://www.acmicpc.net/source/86740801
 
 def main():
     t = int(input())
@@ -7,24 +7,20 @@ def main():
         m,n = map(int,input().split())
         x,y = 0,0
         dx = [1,-1]
-        i = 0
         print(1)
         for _ in range(n-1):
             print_answer(x,y)
             y += 1
-
         print_answer(x,y)
         for _ in range(m-1):
-            x += dx[i]
+            x += 1
             print_answer(x,y)
         y -= 1
-        i += 1
-        for _ in range(n-1):
+        for i in range(1,n):
             print_answer(x,y)
             for _ in range(m-2):
-                x += dx[i]
+                x += dx[i%2]
                 print_answer(x,y)
-            i += 1; i %= 2
             y -= 1
 
 def print_answer(x,y):
