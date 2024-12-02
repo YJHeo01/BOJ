@@ -1,6 +1,5 @@
 #https://www.acmicpc.net/problem/1306
-#https://www.acmicpc.net/source/87085787
-#세그먼트 트리
+#https://www.acmicpc.net/source/87087590
 
 import math
 
@@ -9,26 +8,31 @@ def main():
     s_length = 2 ** math.ceil(math.log2(n)+1)
     s = [-1] * (s_length)
     a = list(map(int,input().split()))
-    init(a,s,1,0,n-1)
+    leaf_start = s_length // 2 -1
+    for i in range(n):
+        s[leaf_start + i] = a[i]
+    init(s,s_length-1)
     for i in range(m-1,n-m+1):
-        print(query(s,1,i-(m-1),i+(m-1),0,n-1),end=" ")
+        print(query(s,i-(m-1)+leaf_start,i+(m-1)+leaf_start),end=" ")
 
-def init(a,s,node,start,end):
-    if start == end:
-        s[node] = a[start]
-        return
-    l_node = node * 2; r_node = l_node + 1
-    mid = (start+end) // 2
-    init(a,s,l_node,start,mid)
-    init(a,s,r_node,mid+1,end)
-    s[node] = max(s[l_node],s[r_node])
+def init(s,i):
+    while True:
+        if i == 1: break
+        s[i//2] = max(s[i],s[i//2])
+        i -= 1
 
-def query(s,node,left,right,start,end):
-    if start > right or end < left: return -1
-    if left <= start and end <= right: return s[node]
-    l_node = node * 2; r_node = l_node + 1
-    mid = (start+end) // 2
-    return max(query(s,l_node,left,right,start,mid),query(s,r_node,left,right,mid+1,end))
+def query(s,start,end):
+    ret_value = -1
+    while start <= end:
+        if start % 2 == 1:
+            ret_value = max(s[start],ret_value)
+            start += 1
+        if end % 2 == 0:
+            ret_value = max(s[end],ret_value)
+            end -= 1
+        start = start // 2
+        end = end // 2
+    return ret_value
 
 if __name__ == "__main__":
     main()
