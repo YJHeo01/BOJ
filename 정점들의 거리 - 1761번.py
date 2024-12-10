@@ -1,4 +1,5 @@
 #https://www.acmicpc.net/user/sk14cj
+#https://www.acmicpc.net/problem/1761
 #https://www.acmicpc.net/source/87327273
 
 #최소 공통 조상
